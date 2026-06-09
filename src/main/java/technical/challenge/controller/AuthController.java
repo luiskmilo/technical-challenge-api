@@ -33,7 +33,7 @@ public class AuthController {
      *   { "email": "admin@test.com", "password": "admin123" }
      *
      * Ejemplo body (SSO):
-     *   { "ssoToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc4MTAzNjA1NywiZXhwIjoxNzgxMDM5NjU3fQ.HX7O-Dn8xmwcthOg39Mh8T7FVTj__Gg1QLbOFSkwxh4" }
+     *   { "ssoToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9" }
      */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
