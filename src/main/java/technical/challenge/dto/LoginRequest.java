@@ -1,14 +1,12 @@
 package technical.challenge.dto;
 
 /**
- * DTO para la solicitud de inicio de sesion.
- * Soporta autenticacion por credenciales (email+password) o token SSO.
+ * DTO para la solicitud de inicio de sesion por credenciales (email + password).
  */
 public class LoginRequest {
 
     private String email;
     private String password;
-    private String ssoToken;
 
     public LoginRequest() {
     }
@@ -27,18 +25,6 @@ public class LoginRequest {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getSsoToken() {
-        return ssoToken;
-    }
-
-    public void setSsoToken(String ssoToken) {
-        this.ssoToken = ssoToken;
-    }
-
-    public boolean isSsoRequest() {
-        return ssoToken != null && !ssoToken.isEmpty();
     }
 
 }

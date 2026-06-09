@@ -9,11 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 import technical.challenge.dto.ErrorResponse;
 import technical.challenge.dto.LoginRequest;
 import technical.challenge.dto.LoginResponse;
+import technical.challenge.dto.SsoLoginRequest;
 import technical.challenge.service.AuthService;
 
 /**
- * Controlador para el endpoint de autenticacion.
- * Expone POST /api/auth/login para login con credenciales o SSO.
+ * Controlador para los endpoints de autenticacion.
+ * Expone POST /api/auth/login para credenciales y POST /api/auth/sso para SSO.
  */
 @RestController
 @RequestMapping("/api/auth")
@@ -26,14 +27,10 @@ public class AuthController {
     }
 
     /**
-     * Endpoint de inicio de sesion unificado.
-     * Soporta login por email+password o por token SSO.
+     * Endpoint de inicio de sesion por credenciales (email + password).
      *
-     * Ejemplo body (credenciales):
+     * Ejemplo body:
      *   { "email": "admin@test.com", "password": "admin123" }
-     *
-     * Ejemplo body (SSO):
-     *   { "ssoToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9" }
      */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
@@ -42,6 +39,24 @@ public class AuthController {
         if (response == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new ErrorResponse(401, "Credenciales invalidas"));
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Endpoint de inicio de sesion por SSO.
+     *
+     * Ejemplo body:
+     *   { "ssoToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9" }
+     */
+    @PostMapping("/sso")
+    public ResponseEntity<?> ssoLogin(@RequestBody SsoLoginRequest request) {
+        LoginResponse response = authService.authenticateWithSso(request.getSsoToken());
+
+        if (response == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponse(401, "Token SSO invalido"));
         }
 
         return ResponseEntity.ok(response);
