@@ -23,30 +23,32 @@ public class AuthService {
     }
 
     /**
-     * Autentica un usuario por credenciales (email+password) o por SSO.
-     * @param request con email/password o ssoToken
+     * Autentica un usuario por credenciales (email + password).
+     * @param request con email y password
      * @return LoginResponse con token JWT, o null si falla la autenticacion
      */
     public LoginResponse authenticate(LoginRequest request) {
-        User user = null;
-
-        if (request.isSsoRequest()) {
-            // Autenticacion via SSO simulado
-            user = ssoProvider.validateSsoToken(request.getSsoToken());
-        } else {
-            // Autenticacion por credenciales (email + password)
-            user = User.findByEmail(request.getEmail());
-            if (user != null && !user.getPassword().equals(request.getPassword())) {
-                user = null;
-            }
+        User user = User.findByEmail(request.getEmail());
+        if (user == null || !user.getPassword().equals(request.getPassword())) {
+            return null;
         }
+        return buildResponse(user);
+    }
 
+    /**
+     * Autentica un usuario mediante token SSO.
+     * @param ssoToken token SSO a validar
+     * @return LoginResponse con token JWT, o null si falla la autenticacion
+     */
+    public LoginResponse authenticateWithSso(String ssoToken) {
+        User user = ssoProvider.validateSsoToken(ssoToken);
         if (user == null) return null;
+        return buildResponse(user);
+    }
 
-        // Generar token JWT
+    private LoginResponse buildResponse(User user) {
         String token = jwtProvider.generateToken(user.getEmail(), user.getRole());
         long expiresIn = jwtProvider.getExpirationMs();
-
         return new LoginResponse(token, "Bearer", user.getEmail(), user.getName(),
                 user.getRole().name(), expiresIn);
     }

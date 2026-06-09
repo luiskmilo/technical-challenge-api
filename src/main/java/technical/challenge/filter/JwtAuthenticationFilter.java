@@ -33,8 +33,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI();
 
-        // Permitir el endpoint de login sin autenticacion
-        if (path.equals("/api/auth/login")) {
+        // Permitir los endpoints de autenticacion sin token JWT
+        if (path.equals("/api/auth/login") || path.equals("/api/auth/sso")) {
             filterChain.doFilter(request, response);
             return;
         }
