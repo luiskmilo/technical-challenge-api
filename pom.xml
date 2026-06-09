@@ -12,7 +12,7 @@
         <relativePath/>
     </parent>
 
-    <groupId>Technical</groupId>
+    <groupId>technical</groupId>
     <artifactId>challenge</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>challenge</name>
