@@ -86,7 +86,7 @@ Inicio de sesión por credenciales.
 }
 ```
 
-### `POST /api/auth/sso`
+### `GET /api/auth/sso`
 
 Inicio de sesión mediante token SSO simulado.
 
