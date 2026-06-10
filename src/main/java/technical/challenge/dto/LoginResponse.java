@@ -5,12 +5,12 @@ package technical.challenge.dto;
  */
 public class LoginResponse {
 
-    private String token;
+    protected  String token;
     private String type;
     private String email;
     private String name;
     private String role;
-    private long expiresIn;
+    private  long expiresIn;
 
     public LoginResponse() {
     }
@@ -47,5 +47,6 @@ public class LoginResponse {
     public long getExpiresIn() {
         return expiresIn;
     }
+
 
 }
