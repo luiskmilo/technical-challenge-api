@@ -3,6 +3,7 @@ package technical.challenge.service;
 import org.springframework.stereotype.Service;
 import technical.challenge.dto.LoginRequest;
 import technical.challenge.dto.LoginResponse;
+import technical.challenge.dto.LoginSsoResponse;
 import technical.challenge.model.User;
 import technical.challenge.security.JwtTokenProvider;
 import technical.challenge.security.SsoProvider;
@@ -36,14 +37,12 @@ public class AuthService {
     }
 
     /**
-     * Autentica un usuario mediante token SSO.
-     * @param ssoToken token SSO a validar
-     * @return LoginResponse con token JWT, o null si falla la autenticacion
+     * valida el code simulado
      */
-    public LoginResponse authenticateWithSso(String ssoToken) {
-        User user = ssoProvider.validateSsoToken(ssoToken);
+    public LoginSsoResponse authenticateWithSso(String code) {
+        User user = ssoProvider.validateSsoToken(code);
         if (user == null) return null;
-        return buildResponse(user);
+        return buildSsoResponse(user);
     }
 
     private LoginResponse buildResponse(User user) {
@@ -51,6 +50,12 @@ public class AuthService {
         long expiresIn = jwtProvider.getExpirationMs();
         return new LoginResponse(token, "Bearer", user.getEmail(), user.getName(),
                 user.getRole().name(), expiresIn);
+    }
+
+    private LoginSsoResponse buildSsoResponse(User user) {
+        String token = jwtProvider.generateToken(user.getEmail(), user.getRole());
+        long expiresIn = jwtProvider.getExpirationMs();
+        return new LoginSsoResponse(token, expiresIn);
     }
 
 }
